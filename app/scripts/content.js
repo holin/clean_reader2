@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import _ from 'lodash'
 import Reader from './libs/reader.js';
 const reader = new Reader($);
 
@@ -6,6 +7,9 @@ new function($) {
   function init($) {
     let toggle_key_press_count = 0;
     $(document).keyup(function(e) {
+      if (_.includes(['INPUT'], e.target.tagName)) {
+        return;
+      }
       // console.log('e.keyCode', e.keyCode);
       if (e.keyCode == 68) {
         //keypess: r

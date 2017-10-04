@@ -1,3 +1,5 @@
+$reader-width: 900px;
+
 .clean-reader-body-2,
 #clean-reader-body-2 {
     * {
@@ -25,7 +27,6 @@
         padding: 0;
     }
     .clean-reader-show {
-        width: 100% !important;
         margin: 0 !important;
         max-width: none !important;
         padding: 0 !important;
@@ -34,7 +35,6 @@
     .clean-reader-show-main {
         position: absolute !important;
         z-index: 2147483646 !important;
-        width: 100% !important;
         max-width: 100% !important;
         padding: 15px !important;
         margin: 0 !important;
@@ -43,15 +43,17 @@
         top: 0 !important;
         background: white !important;
         > .clean-reader-show {
+            float: none !important;
             margin: 0 auto !important;
             padding: 15px !important;
             border: 1px solid #eee !important;
             border-radius: 5px !important;
-            max-width: 800px !important;
+            max-width: $reader-width !important;
             box-shadow: 2px;
             background: #f8f8f8 !important;
-            img {
+            * {
                 max-width: 100%;
+                word-break: break-all;
             }
         }
     }
@@ -60,7 +62,7 @@
 .clean-reader-body-prepare-2 {
     .clean-reader-target {
         background: #f8f8f8 !important;
-        border: 1px solid #eee !important;
+        border: 0px solid #eee !important;
         position: relative;
         * {
             background-color: transparent !important;

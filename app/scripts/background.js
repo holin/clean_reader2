@@ -16,7 +16,7 @@ chrome.browserAction.setBadgeText({
 })
 
 chrome.browserAction.onClicked.addListener(function(tab) {
-  console.log(_.max([3,4,6,5]))
+  console.log(_.max([3,1,6,5]))
   console.log("reload at", new Date(0))
  });
 

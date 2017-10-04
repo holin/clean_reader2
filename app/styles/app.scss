@@ -52,8 +52,13 @@ $reader-width: 900px;
             box-shadow: 2px;
             background: #f8f8f8 !important;
             * {
+                line-height: 1.5em;
                 max-width: 100%;
                 word-break: break-all;
+            }
+            h1, h2, h3, h4, h5 {
+                margin-top: .5em;
+                margin-bottom: .5em;
             }
         }
     }

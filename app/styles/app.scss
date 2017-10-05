@@ -2,13 +2,14 @@ $reader-width: 900px;
 
 .clean-reader-body-2,
 #clean-reader-body-2 {
+    overflow: hidden;
     * {
         border: none;
-    }
-    body {
-        overflow-x: hidden;
+        overflow: hidden;
     }
     .clean-reader-clearfix {
+        display: block;
+        height: 1px;
         clear: both;
     }
     .clean-reader-mask {
@@ -27,10 +28,10 @@ $reader-width: 900px;
         padding: 0;
     }
     .clean-reader-show {
-        margin: 0 !important;
         max-width: none !important;
+        min-height: 100%;
         padding: 0 !important;
-        height: 100%;
+        margin: 0 auto !important;
     }
     .clean-reader-show-main {
         position: absolute !important;
@@ -38,13 +39,12 @@ $reader-width: 900px;
         max-width: 100% !important;
         padding: 15px !important;
         margin: 0 !important;
-        overflow-y: auto !important;
+        overflow-y: scroll !important;
         overflow-x: hidden !important;
         top: 0 !important;
         background: white !important;
         > .clean-reader-show {
             float: none !important;
-            margin: 0 auto !important;
             padding: 15px !important;
             border: 1px solid #eee !important;
             border-radius: 5px !important;

@@ -23,6 +23,8 @@ class Reader {
     this.main_show_klass = 'clean-reader-show-main';
     this.target_klass = 'clean-reader-target';
     this.clearfix_klass = 'clean-reader-clearfix';
+    this.used_target_klass = 'clean-reader-used-target';
+    this.root_klass = 'clean-reader-root';
   }
 
   toggle() {
@@ -53,38 +55,41 @@ class Reader {
   dozoom() {
     let $ = this.$;
     // console.log("Reader.current_zoom", Reader.current_zoom)
-    $('.' + this.main_show_klass)
-      // .find('>.' + this.show_klass)
+    $('.' + this.root_klass)
+      .find('.' + this.used_target_klass)
       .css('zoom', '' + this.current_zoom + '%');
-    this.resize();
     this.update_zoom();
-  }
-
-  resetzoom() {
-    let $ = this.$;
-    // console.log("Reader.current_zoom", Reader.current_zoom)
-    $('.' + this.main_show_klass)
-      // .find('>.' + this.show_klass)
-      .css('zoom', '100%')
-      .css('width', 'auto');
-    let w = this.origin_width;
-    $('.' + this.main_show_klass)
-      .find('>.' + this.show_klass)
-      .css('width', 'auto');
+    this.resize();
   }
 
   update_zoom() {
     this.zoomPercents[self.location.hostname] = this.current_zoom;
-    this.msg_update_zoom_percent()
+    this.msg_update_zoom_percent();
   }
 
   resize() {
     let $ = this.$;
+    let $used = $('.' + this.used_target_klass);
     let w = this.max_width / this.current_zoom * 100;
-    // console.log('this.current_zoom', this.current_zoom, w, this.max_width);
-    $('.' + this.main_show_klass)
-      .find('>.' + this.show_klass)
-      .css('width', '' + w + 'px');
+
+    $used.css('width', '' + w + 'px');
+
+    setTimeout(() => {
+      this.set_same_height()
+    }, 10);
+  }
+
+  set_same_height() {
+    let $ = this.$;
+    let $main = $('.' + this.main_show_klass);
+
+    var e = $main
+    while (e.get(0).tagName != 'BODY') {
+      e
+        .css('height', '' + $(window).height() + 'px')
+        .css('width', '' + $(window).width() + 'px');
+      e = e.parent();
+    }
   }
 
   close() {
@@ -96,19 +101,7 @@ class Reader {
       return;
     }
 
-    let $parent = $('.' + this.main_show_klass).parent();
-    // $parent.css("height", "" + this.parent_origin_height + "px");
-    // console.log('this.origin_width', this.origin_width);
-    $parent
-      .find('>.' + this.show_klass)
-      .css('width', '' + this.origin_width + 'px');
-    this.resetzoom();
-
-    $('body *')
-      .removeClass(this.hide_klass)
-      .removeClass(this.show_klass)
-      .removeClass(this.main_show_klass);
-    $('.' + this.clearfix_klass).remove();
+    $("."+this.root_klass).remove();
 
     this.reading = false;
     $('.' + this.mask_klass).remove();
@@ -131,6 +124,30 @@ class Reader {
       elem = $(elem).parents('.' + this.target_klass);
     }
 
+    //clone node
+    elem.addClass(this.used_target_klass)
+    e = elem;
+    let origin_e = e;
+    while (e.get(0).tagName != 'BODY') {
+      origin_e = e;
+      e = e.parent();
+    }
+
+    let cloned_elem = $(origin_e.clone());
+    cloned_elem.addClass(this.root_klass)
+
+    //hide all other node
+    $('body *').addClass(this.hide_klass);
+    elem.removeClass(this.used_target_klass)
+
+    //append to body
+    $('body').append(cloned_elem);
+
+    //hide all node
+    cloned_elem.find('*').addClass(this.hide_klass);
+
+    elem = cloned_elem.find("."+this.used_target_klass)
+
     let $parent = $(elem).parent();
     if (this.parent_origin_height == 0) {
       this.parent_origin_height = $parent.height();
@@ -144,18 +161,11 @@ class Reader {
       .addClass(this.body_klass)
       .removeClass(this.prepare_klass);
 
-    $('body *').addClass(this.hide_klass);
     $parent.addClass(this.main_show_klass);
 
-    var e = $(elem)
-      .addClass(this.show_klass)
-      .removeClass(this.target_klass);
-
-    //insert mask
-    $('body').prepend('<div class="' + this.mask_klass + '"></div>');
-    //end insert mask
-
-    e
+    var e = elem;
+    e.addClass(this.show_klass)
+      .removeClass(this.target_klass)
       .removeClass(this.hide_klass)
       .find('*')
       .removeClass(this.hide_klass);
@@ -167,18 +177,15 @@ class Reader {
       e = e.parent();
     }
 
-    let max_height = $(window).height();
-    let child_height = $parent.find('> .' + this.show_klass).height();
-    if (child_height > max_height) {
-      max_height = child_height;
-    }
-    max_height += 50;
-    // $parent.css('height', '' + max_height + 'px').find(">."+this.show_klass).append("<div class='"+this.clearfix_klass+"'></div>")
+    cloned_elem.find('.' + this.hide_klass).remove()
+
+    let $child = $parent.find('> .' + this.show_klass);
+
+    // $parent.append("<div class='" + this.clearfix_klass + "'></div>");
 
     this.reading = true;
     setTimeout(e => {
       $(window).scrollTop(0);
-
       if (this.origin_width == 0) {
         this.origin_width = $parent.width();
       }
@@ -300,7 +307,7 @@ class Reader {
       {
         action: 'init_zoom_percents'
       },
-      (response) => {
+      response => {
         this.zoomPercents = response || {};
         // console.log("init_zoom_percents", response)
       }

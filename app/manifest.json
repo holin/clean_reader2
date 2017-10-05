@@ -9,6 +9,12 @@
     "16": "images/icon-16.png",
     "128": "images/icon-128.png"
   },
+
+  "permissions": [
+    "activeTab", "tabs", "http://*/*", "https://*/*", "file://*/*",
+    "storage"
+  ],
+
   "background": {
     "scripts": ["scripts/background.js"]
   },

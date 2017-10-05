@@ -1,6 +1,6 @@
 class Reader {
   constructor($) {
-    console.log('reader constuctor');
+    // console.log('reader constuctor');
 
     this.$ = $;
     this.off = true;
@@ -32,10 +32,11 @@ class Reader {
       this.close();
     }
     this.off = !this.off;
+    this.msg_toggle();
   }
 
   run() {
-    console.log('reader run');
+    // console.log('reader run');
     this.init_events();
   }
 
@@ -66,28 +67,28 @@ class Reader {
       // .find('>.' + this.show_klass)
       .css('zoom', '100%')
       .css('width', 'auto');
-    let w = this.origin_width
+    let w = this.origin_width;
     $('.' + this.main_show_klass)
       .find('>.' + this.show_klass)
-      .css('width', "auto");
+      .css('width', 'auto');
   }
 
   update_zoom() {
     this.zoomPercents[self.location.hostname] = this.current_zoom;
-    // this.msg_update_zoom_percent()
+    this.msg_update_zoom_percent()
   }
 
   resize() {
     let $ = this.$;
-    let w = this.max_width / this.current_zoom * 100
-    console.log("this.current_zoom", this.current_zoom, w, this.max_width)
+    let w = this.max_width / this.current_zoom * 100;
+    // console.log('this.current_zoom', this.current_zoom, w, this.max_width);
     $('.' + this.main_show_klass)
       .find('>.' + this.show_klass)
-      .css('width', "" + w + "px");
+      .css('width', '' + w + 'px');
   }
 
   close() {
-    console.log('reader close');
+    // console.log('reader close');
     let $ = this.$;
     // close code pre first?
     if ($('body .max-pre').length > 0) {
@@ -97,9 +98,11 @@ class Reader {
 
     let $parent = $('.' + this.main_show_klass).parent();
     // $parent.css("height", "" + this.parent_origin_height + "px");
-    console.log("this.origin_width", this.origin_width)
-    $parent.find(">." + this.show_klass).css('width', '' + this.origin_width + 'px')
-    this.resetzoom()
+    // console.log('this.origin_width', this.origin_width);
+    $parent
+      .find('>.' + this.show_klass)
+      .css('width', '' + this.origin_width + 'px');
+    this.resetzoom();
 
     $('body *')
       .removeClass(this.hide_klass)
@@ -124,7 +127,7 @@ class Reader {
 
     //find parent target
     if ($(elem).parents('.' + this.target_klass).length > 0) {
-      console.log('parent', $(elem).parents('.' + this.target_klass));
+      // console.log('parent', $(elem).parents('.' + this.target_klass));
       elem = $(elem).parents('.' + this.target_klass);
     }
 
@@ -132,9 +135,8 @@ class Reader {
     if (this.parent_origin_height == 0) {
       this.parent_origin_height = $parent.height();
     }
-    console.log("$(window).width()", $(window).width())
-    $parent.css("width", "" + $(window).width() + "px");
-
+    // console.log('$(window).width()', $(window).width());
+    $parent.css('width', '' + $(window).width() + 'px');
 
     this.clear_selection();
     $('html')
@@ -174,14 +176,14 @@ class Reader {
     // $parent.css('height', '' + max_height + 'px').find(">."+this.show_klass).append("<div class='"+this.clearfix_klass+"'></div>")
 
     this.reading = true;
-    setTimeout((e) => {
+    setTimeout(e => {
       $(window).scrollTop(0);
 
       if (this.origin_width == 0) {
         this.origin_width = $parent.width();
       }
       this.current_zoom = this.zoomPercents[self.location.hostname] || 100;
-      this.dozoom()
+      this.dozoom();
     }, 1);
   }
 
@@ -279,6 +281,43 @@ class Reader {
       '189': this.zoomout
     };
   }
+
+  //messages
+  msg_toggle() {
+    chrome.extension.sendMessage(
+      {
+        action: 'toggle',
+        is_off: this.off
+      },
+      function(response) {
+        // console.log(response);
+      }
+    );
+  }
+
+  msg_init_zoom_percents() {
+    chrome.extension.sendMessage(
+      {
+        action: 'init_zoom_percents'
+      },
+      (response) => {
+        this.zoomPercents = response || {};
+        // console.log("init_zoom_percents", response)
+      }
+    );
+  }
+
+  msg_update_zoom_percent() {
+    chrome.extension.sendMessage(
+      {
+        action: 'update_zoom_percent',
+        domain: self.location.hostname,
+        percent: this.current_zoom
+      },
+      function(response) {}
+    );
+  }
+  //end messages
 }
 
 export default Reader;

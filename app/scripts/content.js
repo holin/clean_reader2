@@ -4,7 +4,7 @@ import Reader from './libs/reader.js';
 const reader = new Reader($);
 window.reader = reader;
 reader.msg_init_zoom_percents();
-import 'chromereload/devonly'
+// import 'chromereload/devonly'
 
 new function($) {
   function init($) {

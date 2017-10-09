@@ -25,6 +25,7 @@ class Reader {
     this.clearfix_klass = 'clean-reader-clearfix';
     this.used_target_klass = 'clean-reader-used-target';
     this.root_klass = 'clean-reader-root';
+    this.insert_klass = 'clean-reader-insert-node';
   }
 
   toggle() {
@@ -140,15 +141,23 @@ class Reader {
     $('body *').addClass(this.hide_klass);
     elem.removeClass(this.used_target_klass)
 
+    elem = cloned_elem.find("."+this.used_target_klass)
+
+    if (elem.length == 0) {
+      //self node, insert a parent node
+      cloned_elem = $('<div class="'+this.insert_klass+'"></div>').append(cloned_elem);
+    }
+
     //append to body
     $('body').append(cloned_elem);
+
+    elem = cloned_elem.find("."+this.used_target_klass)
 
     //hide all node
     cloned_elem.find('*').addClass(this.hide_klass);
 
-    elem = cloned_elem.find("."+this.used_target_klass)
-
     let $parent = $(elem).parent();
+
     if (this.parent_origin_height == 0) {
       this.parent_origin_height = $parent.height();
     }
@@ -169,6 +178,7 @@ class Reader {
       .removeClass(this.hide_klass)
       .find('*')
       .removeClass(this.hide_klass);
+
     while (e.get(0).tagName != 'BODY') {
       e.removeClass(this.hide_klass);
       if (!e.is('.' + this.main_show_klass)) {
@@ -179,9 +189,7 @@ class Reader {
 
     cloned_elem.find('.' + this.hide_klass).remove()
 
-    let $child = $parent.find('> .' + this.show_klass);
 
-    // $parent.append("<div class='" + this.clearfix_klass + "'></div>");
 
     this.reading = true;
     setTimeout(e => {

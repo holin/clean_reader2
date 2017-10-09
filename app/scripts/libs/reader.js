@@ -56,9 +56,11 @@ class Reader {
   dozoom() {
     let $ = this.$;
     // console.log("Reader.current_zoom", Reader.current_zoom)
-    $('.' + this.root_klass)
-      .find('.' + this.used_target_klass)
-      .css('zoom', '' + this.current_zoom + '%');
+    let $target = $('.' + this.root_klass).find('.' + this.used_target_klass)
+    if ($target.length == 0) {
+      $target = $("."+this.insert_klass).find('.' + this.used_target_klass)
+    }
+    $target.css('zoom', '' + this.current_zoom + '%');
     this.update_zoom();
     this.resize();
   }

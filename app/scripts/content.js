@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import _ from 'lodash'
 import Reader from './libs/reader.js';
+
 const reader = new Reader($);
 window.reader = reader;
 reader.msg_init_zoom_percents();

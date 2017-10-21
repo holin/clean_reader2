@@ -1,3 +1,5 @@
+import hotkeys from 'hotkeys-js';
+
 class Reader {
   constructor($) {
     // console.log('reader constuctor');
@@ -43,13 +45,19 @@ class Reader {
     this.init_events();
   }
 
-  zoomin() {
-    this.current_zoom += this.zoom_step;
+  zoomin(multiple) {
+    if (!multiple) {
+      multiple = 1
+    }
+    this.current_zoom += this.zoom_step * multiple;
     this.dozoom();
   }
 
-  zoomout() {
-    this.current_zoom -= this.zoom_step;
+  zoomout(multiple) {
+    if (!multiple) {
+      multiple = 1
+    }
+    this.current_zoom -= this.zoom_step * multiple;
     this.dozoom();
   }
 
@@ -208,6 +216,14 @@ class Reader {
     let $ = this.$;
     //addClass to body
     $('html').addClass(this.prepare_klass);
+
+    hotkeys('shift+=', (e) => {
+      this.zoomin(10)
+    });
+
+    hotkeys('shift+-', (e) => {
+      this.zoomout(10)
+    });
 
     $(document).keyup(e => {
       if (this.off) {

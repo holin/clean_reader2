@@ -106,11 +106,14 @@ class Reader {
   close() {
     // console.log('reader close');
     let $ = this.$;
+
     // close code pre first?
     if ($('body .max-pre').length > 0) {
       $('body .max-pre').remove();
       return;
     }
+
+    //TODO remove indicator
 
     $("."+this.root_klass).remove();
 
@@ -124,6 +127,32 @@ class Reader {
     if (!this.off) {
       $('html').addClass(this.prepare_klass);
     }
+  }
+
+  init_indicator() {
+    let $ = this.$;
+    //TODO init indicator
+    $('body').append("<div class='progress-indicator-c'><div class='progress-indicator'></div></div>");
+    $(".clean-reader-show-main").scroll(() => {
+      this.update_indicator();
+    })
+  }
+
+  update_indicator() {
+    let $ = this.$;
+    let height = $(".clean-reader-used-target").height();
+
+    height = height * this.current_zoom / 100
+
+    height -= $(".clean-reader-show-main").height();
+
+    let top = $(".clean-reader-show-main").scrollTop();
+
+    let percent = (top / height) * 100;
+    if (percent > 100) {
+      percent = 100;
+    }
+    $(".progress-indicator").css("width", ""+percent+"%");
   }
 
   read(elem) {
@@ -209,6 +238,10 @@ class Reader {
       }
       this.current_zoom = this.zoomPercents[self.location.hostname] || 100;
       this.dozoom();
+
+      //init indicator
+      this.init_indicator();
+
     }, 1);
   }
 
@@ -216,6 +249,10 @@ class Reader {
     let $ = this.$;
     //addClass to body
     $('html').addClass(this.prepare_klass);
+
+    hotkeys('a', (e) => {
+      this.update_indicator()
+    });
 
     hotkeys('shift+=', (e) => {
       this.zoomin(10)

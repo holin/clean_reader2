@@ -8,6 +8,7 @@ $progress-bg-color: rgb(230, 215, 215);
     * {
         border: none;
         overflow: hidden;
+        float: none !important;
     }
     .clean-reader-clearfix {
         display: block;
@@ -73,7 +74,7 @@ $progress-bg-color: rgb(230, 215, 215);
 .clean-reader-body-prepare-2 {
     .clean-reader-target {
         background: #f8f8f8 !important;
-        border: 0px solid #eee !important;
+        border: 1px dotted #eee !important;
         position: relative;
         * {
             background-color: transparent !important;

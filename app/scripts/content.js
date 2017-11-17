@@ -11,7 +11,10 @@ new function($) {
   function init($) {
     let toggle_key_press_count = 0;
     $(document).keyup(function(e) {
-      if (_.includes(['INPUT'], e.target.tagName)) {
+      if (!e) {
+        return
+      }
+      if (_.includes(['INPUT', 'TEXTAREA'], e.target.tagName)) {
         return;
       }
       // console.log('e.keyCode', e.keyCode);

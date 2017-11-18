@@ -231,6 +231,10 @@ class Reader {
 
 
     this.reading = true;
+
+    //update img src
+    this.fix_img_src();
+
     setTimeout(e => {
       $(window).scrollTop(0);
       if (this.origin_width == 0) {
@@ -243,6 +247,21 @@ class Reader {
       this.init_indicator();
 
     }, 1);
+  }
+
+  //Fix <img data-s="300,640" data-type="png" data-src="https://mmbiz.qpic.cn/mmbiz_png/rhmfj3YNVIJnqvQ3eV88hdw0APLwxFGTpib9HmSNvHNJaZcWcDibc8kAUclOICWYjiaeics4dEFhVhE5DnTm53T5ew/0?wx_fmt=png" data-copyright="0" class="img_loading" data-ratio="0.7487352445193929" data-w="593" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" style="width: 593px !important; height: 444px !important;">
+  fix_img_src() {
+    let $ = this.$;
+    $("#" + this.id).find("img").each(function(){
+      let $img = $(this);
+      //Get real img src
+      let data_src = $img.attr("data-src");
+      let src = $img.attr("src");
+      let need_update_src = data_src && data_src.length > 0 && data_src != src
+      if (need_update_src) {
+        $img.attr("src", data_src);
+      }
+    });
   }
 
   init_events() {

@@ -69,6 +69,9 @@ class Reader {
       $target = $("."+this.insert_klass).find('.' + this.used_target_klass)
     }
     $target.css('zoom', '' + this.current_zoom + '%');
+    let pre_zoom = (100 / this.current_zoom) * 100;
+
+    $target.find("pre").css('zoom', ''+pre_zoom+'%');
     this.update_zoom();
     this.resize();
   }

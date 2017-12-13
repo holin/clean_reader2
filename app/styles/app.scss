@@ -63,6 +63,13 @@ $progress-bg-color: rgb(230, 215, 215);
                 max-width: 100%;
                 word-break: break-word;
             }
+            pre {
+              overflow: auto !important;
+              max-width: none !important;
+            }
+            pre * {
+                max-width: none !important;
+            }
             h1, h2, h3, h4, h5 {
                 margin-top: .5em;
                 margin-bottom: .5em;

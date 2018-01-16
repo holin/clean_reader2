@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import _ from 'lodash'
 import Reader from './libs/reader.js';
+import hotkeys from 'hotkeys-js';
 
 const reader = new Reader($);
 window.reader = reader;
@@ -8,33 +9,33 @@ reader.msg_init_zoom_percents();
 // import 'chromereload/devonly'
 
 new function($) {
-  function init($) {
-    let toggle_key_press_count = 0;
-    $(document).keyup(function(e) {
-      if (!e) {
-        return
-      }
-      if (_.includes(['INPUT', 'TEXTAREA'], e.target.tagName)) {
-        return;
-      }
-      // console.log('e.keyCode', e.keyCode);
-      if (e.keyCode == 68) {
-        //keypess: r
-        toggle_key_press_count += 1;
-        setTimeout(function() {
-          toggle_key_press_count = 0;
-        }, 500);
-        if (toggle_key_press_count > 1) {
-          reader.toggle();
-        }
+  function doublePress(key, fn) {
+    hotkeys(key, (e) => {
+      let scope = 'scope-'+key;
+      if (hotkeys.getScope(scope) !== 'all') {
+        fn();
+        hotkeys.deleteScope(scope);
       } else {
-        toggle_key_press_count = 0;
+        hotkeys.setScope(scope);
+        setTimeout(() => {
+          hotkeys.deleteScope(scope);
+        }, 500);
       }
+    });
+  }
 
-      if (e.keyCode == 27) {
-        //escape
-        reader.close();
-      }
+  function init($) {
+
+    // Back to top by press `b` twice in 500 millisecond.
+    doublePress('b', () => {
+      $('html,body').animate({scrollTop:0},0);
+    });
+
+    doublePress('d', () => { reader.toggle(); });
+
+    hotkeys('esc', (e) => {
+      //escape
+      reader.close();
     });
   }
   init($);

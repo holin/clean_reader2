@@ -26,6 +26,17 @@ new function($) {
 
   function init($) {
 
+    if (self.location.pathname == "/kbsweb/") {
+      _.each($(".schedule-item"), function(item){
+        let $item = $(item);
+        let html = _.map($item.find(".team"), function(team){
+          return $.trim($(team).text());
+        }).join("vs");
+        $item.after("<div style='margin-left:40px;'><input type='text' value='"+ html +"' style='border:1px solid #efefef; padding: 3px;text-align:center' onfocus='this.select()'></div>");
+      });
+
+    }
+
     // Back to top by press `b` twice in 500 millisecond.
     doublePress('b', () => {
       $('html,body').animate({scrollTop:0},0);

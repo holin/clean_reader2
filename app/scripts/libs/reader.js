@@ -61,6 +61,17 @@ class Reader {
     this.dozoom();
   }
 
+
+
+  scrollPage() {
+    let $ = this.$
+    let $target = $(".clean-reader-show-main")
+    let $container = $target.parent()
+    let one_screen = $(window).height()
+    let line_height = 30 //FIXME
+    $target.scrollTop($target.scrollTop() + one_screen - line_height * 1.5)
+  }
+
   dozoom() {
     let $ = this.$;
     // console.log("Reader.current_zoom", Reader.current_zoom)
@@ -274,6 +285,11 @@ class Reader {
 
     hotkeys('a', (e) => {
       this.update_indicator()
+    });
+
+    hotkeys('space', (e) => {
+      this.scrollPage()
+      return false
     });
 
     hotkeys('shift+=', (e) => {

@@ -1,431 +1,436 @@
-import hotkeys from 'hotkeys-js';
+import hotkeys from 'hotkeys-js'
 
 class Reader {
-  constructor($) {
+  constructor ($) {
     // console.log('reader constuctor');
 
-    this.$ = $;
-    this.off = true;
-    this.reading = false;
-    this.target_selector = 'div,section,article,p';
-    this.current_zoom = 100;
-    this.origin_width = 0;
-    this.zoom_step = 10;
-    this.parent_origin_height = 0;
-    this.max_width = 900;
-    this.zoomPercents = {};
+    this.$ = $
+    this.off = true
+    this.reading = false
+    this.target_selector = 'div,section,article,p'
+    this.current_zoom = 100
+    this.origin_width = 0
+    this.zoom_step = 10
+    this.parent_origin_height = 0
+    this.max_width = 900
+    this.zoomPercents = {}
 
     //css class
-    this.id = 'clean-reader-container-2';
-    this.prepare_klass = 'clean-reader-body-prepare-2';
-    this.mask_klass = 'clean-reader-mask';
-    this.body_klass = 'clean-reader-body-2';
-    this.hide_klass = 'clean-reader-hide';
-    this.show_klass = 'clean-reader-show';
-    this.main_show_klass = 'clean-reader-show-main';
-    this.target_klass = 'clean-reader-target';
-    this.clearfix_klass = 'clean-reader-clearfix';
-    this.used_target_klass = 'clean-reader-used-target';
-    this.root_klass = 'clean-reader-root';
-    this.insert_klass = 'clean-reader-insert-node';
+    this.id = 'clean-reader-container-2'
+    this.prepare_klass = 'clean-reader-body-prepare-2'
+    this.mask_klass = 'clean-reader-mask'
+    this.body_klass = 'clean-reader-body-2'
+    this.hide_klass = 'clean-reader-hide'
+    this.show_klass = 'clean-reader-show'
+    this.main_show_klass = 'clean-reader-show-main'
+    this.target_klass = 'clean-reader-target'
+    this.clearfix_klass = 'clean-reader-clearfix'
+    this.used_target_klass = 'clean-reader-used-target'
+    this.root_klass = 'clean-reader-root'
+    this.insert_klass = 'clean-reader-insert-node'
   }
 
-  toggle() {
+  toggle () {
     if (this.off) {
-      this.run();
+      this.run()
     } else {
-      this.close();
+      this.close()
     }
-    this.off = !this.off;
-    this.msg_toggle();
+    this.off = !this.off
+    this.msg_toggle()
   }
 
-  run() {
+  run () {
     // console.log('reader run');
-    this.init_events();
+    this.init_events()
   }
 
-  zoomin(multiple) {
+  zoomin (multiple) {
     if (!multiple) {
       multiple = 1
     }
-    this.current_zoom += this.zoom_step * multiple;
-    this.dozoom();
+    this.current_zoom += this.zoom_step * multiple
+    this.dozoom()
   }
 
-  zoomout(multiple) {
+  zoomout (multiple) {
     if (!multiple) {
       multiple = 1
     }
-    this.current_zoom -= this.zoom_step * multiple;
-    this.dozoom();
+    this.current_zoom -= this.zoom_step * multiple
+    this.dozoom()
   }
 
-
-
-  scrollPage() {
+  scrollPage () {
     let $ = this.$
-    let $target = $(".clean-reader-show-main")
+    let $target = $('.clean-reader-show-main')
     let $container = $target.parent()
     let one_screen = $(window).height()
-    let line_height = 30 //FIXME
+    let line_height = 30 // FIXME
     $target.scrollTop($target.scrollTop() + one_screen - line_height * 1.5)
   }
 
-  dozoom() {
-    let $ = this.$;
+  dozoom () {
+    let $ = this.$
     // console.log("Reader.current_zoom", Reader.current_zoom)
     let $target = $('.' + this.root_klass).find('.' + this.used_target_klass)
     if ($target.length == 0) {
-      $target = $("."+this.insert_klass).find('.' + this.used_target_klass)
+      $target = $('.' + this.insert_klass).find('.' + this.used_target_klass)
     }
-    $target.css('zoom', '' + this.current_zoom + '%');
-    let pre_zoom = (100 / this.current_zoom) * 100;
+    $target.css('zoom', '' + this.current_zoom + '%')
+    let pre_zoom = (100 / this.current_zoom) * 100
 
-    $target.find("pre").css('zoom', ''+pre_zoom+'%');
-    this.update_zoom();
-    this.resize();
+    $target.find('pre').css('zoom', '' + pre_zoom + '%')
+    this.update_zoom()
+    this.resize()
   }
 
-  update_zoom() {
-    this.zoomPercents[self.location.hostname] = this.current_zoom;
-    this.msg_update_zoom_percent();
+  update_zoom () {
+    this.zoomPercents[self.location.hostname] = this.current_zoom
+    this.msg_update_zoom_percent()
   }
 
-  resize() {
-    let $ = this.$;
-    let $used = $('.' + this.used_target_klass);
-    let w = this.max_width / this.current_zoom * 100;
+  resize () {
+    let $ = this.$
+    let $used = $('.' + this.used_target_klass)
+    let w = this.max_width / this.current_zoom * 100
 
-    $used.css('width', '' + w + 'px');
+    $used.css('width', '' + w + 'px')
 
     setTimeout(() => {
       this.set_same_height()
-    }, 10);
+    }, 10)
   }
 
-  set_same_height() {
-    let $ = this.$;
-    let $main = $('.' + this.main_show_klass);
+  set_same_height () {
+    let $ = this.$
+    let $main = $('.' + this.main_show_klass)
 
     var e = $main
     while (e.get(0).tagName != 'BODY') {
       e
         .css('height', '' + $(window).height() + 'px')
-        .css('width', '' + $(window).width() + 'px');
-      e = e.parent();
+        .css('width', '' + $(window).width() + 'px')
+      e = e.parent()
     }
   }
 
-  close() {
+  close () {
     // console.log('reader close');
-    let $ = this.$;
+    let $ = this.$
 
     // close code pre first?
     if ($('body .max-pre').length > 0) {
-      $('body .max-pre').remove();
+      $('body .max-pre').remove()
       return;
     }
 
-    //TODO remove indicator
+    // TODO remove indicator
 
-    $("."+this.root_klass).remove();
+    $('.' + this.root_klass).remove()
 
-    this.reading = false;
-    $('.' + this.mask_klass).remove();
-    $('.' + this.target_klass).removeClass(this.target_klass);
-    $('#' + this.id).attr('id', '');
+    this.reading = false
+    $('.' + this.mask_klass).remove()
+    $('.' + this.target_klass).removeClass(this.target_klass)
+    $('#' + this.id).attr('id', '')
     $('html')
       .removeClass(this.body_klass)
-      .removeClass(this.prepare_klass);
+      .removeClass(this.prepare_klass)
     if (!this.off) {
-      $('html').addClass(this.prepare_klass);
+      $('html').addClass(this.prepare_klass)
     }
   }
 
-  init_indicator() {
-    let $ = this.$;
+  init_indicator () {
+    let $ = this.$
     //TODO init indicator
-    $('body').append("<div class='progress-indicator-c'><div class='progress-indicator'></div></div>");
-    $(".clean-reader-show-main").scroll(() => {
-      this.update_indicator();
+    $('body').append("<div class='progress-indicator-c'><div class='progress-indicator'></div></div>")
+    $('.clean-reader-show-main').scroll(() => {
+      this.update_indicator()
     })
   }
 
-  update_indicator() {
-    let $ = this.$;
-    let height = $(".clean-reader-used-target").height();
+  removeHoveredElement () {
+    let $ = this.$
+    $('.clean-reader-target').remove()
+  }
+
+  update_indicator () {
+    let $ = this.$
+    let height = $('.clean-reader-used-target').height()
 
     height = height * this.current_zoom / 100
 
-    height -= $(".clean-reader-show-main").height();
+    height -= $('.clean-reader-show-main').height()
 
-    let top = $(".clean-reader-show-main").scrollTop();
+    let top = $('.clean-reader-show-main').scrollTop()
 
-    let percent = (top / height) * 100;
+    let percent = (top / height) * 100
     if (percent > 100) {
-      percent = 100;
+      percent = 100
     }
-    $(".progress-indicator").css("width", ""+percent+"%");
+    $('.progress-indicator').css('width', '' + percent + '%')
   }
 
-  read(elem) {
-    let $ = this.$;
+  read (elem) {
+    let $ = this.$
 
     //find parent target
     if ($(elem).parents('.' + this.target_klass).length > 0) {
       // console.log('parent', $(elem).parents('.' + this.target_klass));
-      elem = $(elem).parents('.' + this.target_klass);
+      elem = $(elem).parents('.' + this.target_klass)
     }
 
-    //clone node
+    // clone node
     elem.addClass(this.used_target_klass)
-    e = elem;
-    let origin_e = e;
+    e = elem
+    let origin_e = e
     while (e.get(0).tagName != 'BODY') {
-      origin_e = e;
-      e = e.parent();
+      origin_e = e
+      e = e.parent()
     }
 
-    let cloned_elem = $(origin_e.clone());
+    let cloned_elem = $(origin_e.clone())
     cloned_elem.addClass(this.root_klass)
 
-    //hide all other node
-    $('body *').addClass(this.hide_klass);
+    // hide all other node
+    $('body *').addClass(this.hide_klass)
     elem.removeClass(this.used_target_klass)
 
-    elem = cloned_elem.find("."+this.used_target_klass)
+    elem = cloned_elem.find('.' + this.used_target_klass)
 
     if (elem.length == 0) {
-      //self node, insert a parent node
-      cloned_elem = $('<div class="'+this.insert_klass+'"></div>').append(cloned_elem);
+      // self node, insert a parent node
+      cloned_elem = $('<div class="' + this.insert_klass + '"></div>').append(cloned_elem)
     }
 
-    //append to body
-    $('body').append(cloned_elem);
+    // append to body
+    $('body').append(cloned_elem)
 
-    elem = cloned_elem.find("."+this.used_target_klass)
+    elem = cloned_elem.find('.' + this.used_target_klass)
 
-    //hide all node
-    cloned_elem.find('*').addClass(this.hide_klass);
+    // hide all node
+    cloned_elem.find('*').addClass(this.hide_klass)
 
-    let $parent = $(elem).parent();
+    let $parent = $(elem).parent()
 
     if (this.parent_origin_height == 0) {
-      this.parent_origin_height = $parent.height();
+      this.parent_origin_height = $parent.height()
     }
     // console.log('$(window).width()', $(window).width());
-    $parent.css('width', '' + $(window).width() + 'px');
+    $parent.css('width', '' + $(window).width() + 'px')
 
-    this.clear_selection();
+    this.clear_selection()
     $('html')
       .attr('id', this.id)
       .addClass(this.body_klass)
-      .removeClass(this.prepare_klass);
+      .removeClass(this.prepare_klass)
 
-    $parent.addClass(this.main_show_klass);
+    $parent.addClass(this.main_show_klass)
 
-    var e = elem;
+    var e = elem
     e.addClass(this.show_klass)
       .removeClass(this.target_klass)
       .removeClass(this.hide_klass)
       .find('*')
-      .removeClass(this.hide_klass);
+      .removeClass(this.hide_klass)
 
     while (e.get(0).tagName != 'BODY') {
-      e.removeClass(this.hide_klass);
+      e.removeClass(this.hide_klass)
       if (!e.is('.' + this.main_show_klass)) {
-        e.addClass(this.show_klass);
+        e.addClass(this.show_klass)
       }
-      e = e.parent();
+      e = e.parent()
     }
 
     cloned_elem.find('.' + this.hide_klass).remove()
 
-
-
-    this.reading = true;
+    this.reading = true
 
     //update img src
-    this.fix_img_src();
+    this.fix_img_src()
 
     setTimeout(e => {
-      $(window).scrollTop(0);
+      $(window).scrollTop(0)
       if (this.origin_width == 0) {
-        this.origin_width = $parent.width();
+        this.origin_width = $parent.width()
       }
-      this.current_zoom = this.zoomPercents[self.location.hostname] || 100;
-      this.dozoom();
+      this.current_zoom = this.zoomPercents[self.location.hostname] || 100
+      this.dozoom()
 
       //init indicator
-      this.init_indicator();
+      this.init_indicator()
 
-    }, 1);
+    }, 1)
   }
 
-  //Fix <img data-s="300,640" data-type="png" data-src="https://mmbiz.qpic.cn/mmbiz_png/rhmfj3YNVIJnqvQ3eV88hdw0APLwxFGTpib9HmSNvHNJaZcWcDibc8kAUclOICWYjiaeics4dEFhVhE5DnTm53T5ew/0?wx_fmt=png" data-copyright="0" class="img_loading" data-ratio="0.7487352445193929" data-w="593" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" style="width: 593px !important; height: 444px !important;">
-  fix_img_src() {
-    let $ = this.$;
-    $("#" + this.id).find("img").each(function(){
-      let $img = $(this);
+  // Fix <img data-s="300,640" data-type="png" data-src="https://mmbiz.qpic.cn/mmbiz_png/rhmfj3YNVIJnqvQ3eV88hdw0APLwxFGTpib9HmSNvHNJaZcWcDibc8kAUclOICWYjiaeics4dEFhVhE5DnTm53T5ew/0?wx_fmt=png" data-copyright="0" class="img_loading" data-ratio="0.7487352445193929" data-w="593" src="data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQImWNgYGBgAAAABQABh6FO1AAAAABJRU5ErkJggg==" style="width: 593px !important; height: 444px !important;">
+  fix_img_src () {
+    let $ = this.$
+    $('#' + this.id).find('img').each(function () {
+      let $img = $(this)
       //Get real img src
-      let data_src = $img.attr("data-src");
-      let src = $img.attr("src");
+      let data_src = $img.attr('data-src')
+      let src = $img.attr('src')
       let need_update_src = data_src && data_src.length > 0 && data_src != src
       if (need_update_src) {
-        $img.attr("src", data_src);
+        $img.attr('src', data_src)
       }
-    });
+    })
   }
 
-  init_events() {
-    let $ = this.$;
+  init_events () {
+    let $ = this.$
     //addClass to body
-    $('html').addClass(this.prepare_klass);
+    $('html').addClass(this.prepare_klass)
 
     hotkeys('a', (e) => {
       this.update_indicator()
-    });
+    })
+
+    hotkeys('rr', (e) => {
+      this.removeHoveredElement()
+    })
 
     hotkeys('space', (e) => {
       this.scrollPage()
       return false
-    });
+    })
 
     hotkeys('shift+=', (e) => {
       this.zoomin(10)
-    });
+    })
 
     hotkeys('shift+-', (e) => {
       this.zoomout(10)
-    });
+    })
 
     $(document).keyup(e => {
       if (this.off) {
-        return;
+        return
       }
-      var fn = this.keycode_map()['' + e.keyCode];
-      if (typeof fn == 'function') {
-        fn.apply(this);
+      var fn = this.keycode_map()['' + e.keyCode]
+      if (typeof fn === 'function') {
+        fn.apply(this)
       }
-    });
+    })
 
     $(document).mousemove(e => {
       if (this.off || this.reading) {
-        return;
+        return
       }
-      var $this = $(e.target);
+      var $this = $(e.target)
       if ($this.is('.' + this.target_klass)) {
-        return;
+        return
       }
 
       if (!$this.is(this.target_selector)) {
         if ($this.parents(this.target_selector).length == 0) {
-          $('.' + this.target_klass).removeClass(this.target_klass);
+          $('.' + this.target_klass).removeClass(this.target_klass)
         }
-        return;
+        return
       }
-      $('.' + this.target_klass).removeClass(this.target_klass);
-      $this.addClass(this.target_klass);
-    });
+      $('.' + this.target_klass).removeClass(this.target_klass)
+      $this.addClass(this.target_klass)
+    })
 
     $(this.target_selector).dblclick(e => {
       if (this.off || this.reading) {
-        return;
+        return
       }
-      this.read($(e.target));
-      return false;
-    });
+      this.read($(e.target))
+      return false
+    })
 
     $('body').on('dblclick', '.' + this.body_klass + ' pre', e => {
-      this.max_pre($(e.target));
-    });
+      this.max_pre($(e.target))
+    })
 
     $('body').on('click', '.pre-background-toggle', e => {
-      var container = $(e.target).parents('.max-pre');
+      var container = $(e.target).parents('.max-pre')
       if (container.is('.max-pre-dark')) {
-        $(e.target).text('dark');
-        container.removeClass('max-pre-dark').addClass('max-pre-light');
+        $(e.target).text('dark')
+        container.removeClass('max-pre-dark').addClass('max-pre-light')
       } else {
-        $(e.target).text('light');
-        container.removeClass('max-pre-light').addClass('max-pre-dark');
+        $(e.target).text('light')
+        container.removeClass('max-pre-light').addClass('max-pre-dark')
       }
-    });
+    })
 
     $('body').on('click', '.clean-reader-close', e => {
-      this.close();
-    });
+      this.close()
+    })
 
     $('body').on('click', '.clean-reader-zoom-out', e => {
-      this.zoomout();
-    });
+      this.zoomout()
+    })
     $('body').on('click', '.clean-reader-zoom-in', e => {
-      this.zoomin();
-    });
+      this.zoomin()
+    })
   }
 
-  clear_selection() {
+  clear_selection () {
     if (window.getSelection) {
       if (window.getSelection().empty) {
         // Chrome
-        window.getSelection().empty();
+        window.getSelection().empty()
       } else if (window.getSelection().removeAllRanges) {
         // Firefox
-        window.getSelection().removeAllRanges();
+        window.getSelection().removeAllRanges()
       }
     } else if (document.selection) {
       // IE?
-      document.selection.empty();
+      document.selection.empty()
     }
   }
 
-  keycode_map() {
+  keycode_map () {
     if (!this.reading) {
-      return {};
+      return {}
     }
     return {
       '27': this.close,
       '187': this.zoomin,
       '189': this.zoomout
-    };
+    }
   }
 
-  //messages
-  msg_toggle() {
+  // messages
+  msg_toggle () {
     chrome.extension.sendMessage(
       {
         action: 'toggle',
         is_off: this.off
       },
-      function(response) {
+      function (response) {
         // console.log(response);
       }
-    );
+    )
   }
 
-  msg_init_zoom_percents() {
+  msg_init_zoom_percents () {
     chrome.extension.sendMessage(
       {
         action: 'init_zoom_percents'
       },
       response => {
-        this.zoomPercents = response || {};
+        this.zoomPercents = response || {}
         // console.log("init_zoom_percents", response)
       }
-    );
+    )
   }
 
-  msg_update_zoom_percent() {
+  msg_update_zoom_percent () {
     chrome.extension.sendMessage(
       {
         action: 'update_zoom_percent',
         domain: self.location.hostname,
         percent: this.current_zoom
       },
-      function(response) {}
-    );
+      function (response) {}
+    )
   }
-  //end messages
+  // end messages
 }
 
-export default Reader;
+export default Reader

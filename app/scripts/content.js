@@ -31,7 +31,7 @@ new function ($) {
         _.each($('.schedule-item'), function (item) {
           let $item = $(item)
           let html = _.map($item.find('.team'), function (team) {
-            return $.trim($(team).text())
+            return $.trim($(team).text().replace(/\d*\(\d\)/g, ''))
           }).join('vs')
           if (!$item.next().is('.vs-c')) {
             $item.after("<div class='vs-c' style='margin-left:40px;'><input type='text' value='" + html + "' style='border:1px solid #efefef; padding: 3px;text-align:center' onfocus='this.select()'></div>")

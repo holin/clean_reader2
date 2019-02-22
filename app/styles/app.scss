@@ -5,7 +5,7 @@ $progress-bg-color: rgb(230, 215, 215);
 .clean-reader-body-2,
 #clean-reader-body-2 {
     overflow: hidden;
-    max-width: none;
+    max-width: 100% !important;
     * {
         width: auto;
         max-width: none;

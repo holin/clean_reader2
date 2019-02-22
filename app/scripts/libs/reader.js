@@ -107,10 +107,14 @@ class Reader {
     let $main = $('.' + this.main_show_klass)
 
     var e = $main
+    var styles = [
+      'height: ' + $(window).height() + 'px !important',
+      'width: ' + $(window).width() + 'px !important',
+      'max-width: 100% !important',
+      'max-height: 100% !important'
+    ]
     while (e.get(0).tagName != 'BODY') {
-      e
-        .css('height', '' + $(window).height() + 'px')
-        .css('width', '' + $(window).width() + 'px')
+      e.attr("style", styles.join(";"))
       e = e.parent()
     }
   }
@@ -219,6 +223,7 @@ class Reader {
     }
     // console.log('$(window).width()', $(window).width());
     $parent.css('width', '' + $(window).width() + 'px')
+      .css('max-width', '' + $(window).width() + 'px !important')
 
     this.clear_selection()
     $('html')

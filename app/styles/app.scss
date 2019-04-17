@@ -11,6 +11,8 @@ $progress-bg-color: rgb(230, 215, 215);
         max-width: none;
         border: none;
         float: none !important;
+        -webkit-transform: none !important;
+        transform: none !important;
     }
     .clean-reader-clearfix {
         display: block;

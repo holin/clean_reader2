@@ -134,6 +134,7 @@ class Reader {
     $('.' + this.root_klass).remove()
 
     this.reading = false
+    $('.progress-indicator-c').remove();
     $('.' + this.mask_klass).remove()
     $('.' + this.target_klass).removeClass(this.target_klass)
     $('#' + this.id).attr('id', '')

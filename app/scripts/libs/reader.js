@@ -79,6 +79,9 @@ class Reader {
     }
     $target.css('zoom', '' + this.current_zoom + '%')
     let pre_zoom = (100 / this.current_zoom) * 100
+    if (pre_zoom < 100) {
+      pre_zoom = 100;
+    }
 
     $target.find('pre').css('zoom', '' + pre_zoom + '%')
     this.update_zoom()

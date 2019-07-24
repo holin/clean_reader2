@@ -114,7 +114,8 @@ class Reader {
       'height: ' + $(window).height() + 'px !important',
       'width: ' + $(window).width() + 'px !important',
       'max-width: 100% !important',
-      'max-height: 100% !important'
+      'max-height: 100% !important',
+      'flex-basis: auto !important'
     ]
     while (e.get(0).tagName != 'BODY') {
       e.attr("style", styles.join(";"))
@@ -160,7 +161,8 @@ class Reader {
 
   removeHoveredElement () {
     let $ = this.$
-    $('.clean-reader-target').remove()
+    console.log('rr', $('.'+this.target_klass), $('.'+this.target_klass).get(0))
+    $('.'+this.target_klass).remove()
   }
 
   update_indicator () {

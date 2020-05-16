@@ -12,42 +12,42 @@ reader.msg_init_zoom_percents()
 
 new function ($) {
   var clickTimes = {}
-  function doublePress (key, fn) {
+
+  function doublePress(key, fn) {
     clickTimes[key] = 0
 
     hotkeys(key, (e) => {
-        var time = clickTimes[key] || 0
-      let scope = 'scope-' + key
-      if ( time > 0) {
+      var time = clickTimes[key] || 0
+      if (time > 0) {
         fn()
         clickTimes[key] = 0
       } else {
         clickTimes[key] = time + 1
         setTimeout(() => {
-            clickTimes[key] = 0
+          clickTimes[key] = 0
         }, 700)
       }
     })
   }
-  function triplePress (key, fn) {
+
+  function triplePress(key, fn) {
     clickTimes[key] = 0
 
     hotkeys(key, (e) => {
-        var time = clickTimes[key] || 0
-      let scope = 'scope-' + key
-      if ( time > 1) {
+      var time = clickTimes[key] || 0
+      if (time > 1) {
         fn()
         clickTimes[key] = 0
       } else {
         clickTimes[key] = time + 1
         setTimeout(() => {
-            clickTimes[key] = 0
+          clickTimes[key] = 0
         }, 700)
       }
     })
   }
 
-  function init ($) {
+  function init($) {
     if (window.location.pathname === '/kbsweb/') {
       let makeTeamVSFunc = function () {
         let inserted = false
@@ -73,10 +73,14 @@ new function ($) {
 
     // Back to top by press `b` twice in 500 millisecond.
     doublePress('b', () => {
-      $('html,body').animate({scrollTop: 0}, 0)
+      $('html,body').animate({
+        scrollTop: 0
+      }, 0)
     })
 
-    triplePress('d', () => { reader.toggle() })
+    triplePress('d', () => {
+      reader.toggle()
+    })
 
     hotkeys('esc', (e) => {
       // escape

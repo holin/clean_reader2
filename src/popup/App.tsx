@@ -6,7 +6,7 @@ import './App.scss';
 const App = () => {
     return (
         <div className="app">
-            <h1 className="title">popup page</h1>
+            <h1 className="title">popup page - holin</h1>
         </div>
     );
 };

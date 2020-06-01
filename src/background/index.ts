@@ -11,12 +11,12 @@ new function ($) {
 
     var off = true;
     var on_path = {
-      '19': 'icon-16.png',
-      '38': 'icon-32.png'
+      '19': 'icons/icon-16.png',
+      '38': 'icons/icon-32.png'
     };
     var off_path = {
-      '19': 'icon-16_off.png',
-      '38': 'icon-32_off.png'
+      '19': 'icons/icon-16_off.png',
+      '38': 'icons/icon-32_off.png'
     };
     chrome.browserAction.setIcon({
       path: off_path
@@ -94,3 +94,11 @@ new function ($) {
   }
   init($);
 }($);
+
+chrome.contextMenus.create({
+  title: "Save word \"%s\"",
+  contexts: ["selection"],
+  onclick: function(info, tab) {
+      console.log(info.selectionText);
+  }
+});

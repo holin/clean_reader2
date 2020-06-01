@@ -49,6 +49,7 @@
         "lodash": "^4.17.15",
         "normalize.css": "^8.0.1",
         "react": "^16.13.1",
+        "react-desktop": "^0.3.9",
         "react-dom": "^16.13.1",
         "react-hot-loader": "^4.12.21",
         "react-router-dom": "^5.1.2"

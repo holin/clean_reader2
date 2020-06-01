@@ -1,6 +1,6 @@
 
 .DS_Store
-extension/hot/
+extension/
 
 node_modules
 npm-debug.log

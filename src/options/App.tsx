@@ -49,9 +49,6 @@ class App extends Component {
 
   renderLoginForm() {
     return <ListView width="100%">
-      <ListViewHeader>
-      <Text>Login to Hema</Text>
-      </ListViewHeader>
       <ListViewSection >
         <ListViewRow>
         <TextInput

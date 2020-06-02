@@ -119,6 +119,6 @@ chrome.runtime.onMessage.addListener(
     if (request.message) {
       alert_message( request.message )
     }
-    // sendResponse({farewell: "goodbye"})
+    sendResponse({farewell: "goodbye"})
   }
 );

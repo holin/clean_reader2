@@ -112,7 +112,7 @@ if(!save_word_menu) {
           message = 'saved success'
         }
         chrome.tabs.sendMessage(tab.id, {message: message}, function(response) {
-          console.log('response from tab', response);
+          // console.log('response from tab', response);
         });
       })
     }

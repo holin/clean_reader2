@@ -5,7 +5,6 @@
     "manifest_version": 2,
     "minimum_chrome_version": "80",
     "permissions": [
-      "notifications",
       "contextMenus",
       "activeTab", "tabs", "http://*/*", "https://*/*", "file://*/*",
       "storage"

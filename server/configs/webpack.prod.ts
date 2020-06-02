@@ -3,8 +3,8 @@ import { BannerPlugin, HashedModuleIdsPlugin } from 'webpack';
 import merge from 'webpack-merge';
 import CopyPlugin from 'copy-webpack-plugin';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+// import TerserPlugin from 'terser-webpack-plugin';
+// import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import SpeedMeasurePlugin from 'speed-measure-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import LodashModuleReplacementPlugin from 'lodash-webpack-plugin';
@@ -43,21 +43,21 @@ const mergedConfig = merge(commonConfig, {
         new LodashModuleReplacementPlugin(),
         new AntdDayjsWebpackPlugin(),
     ],
-    optimization: {
-        runtimeChunk: 'single',
-        splitChunks: {
-            chunks: 'all',
-        },
-        minimize: true,
-        minimizer: [
-            new TerserPlugin({
-                cache: true,
-                parallel: true,
-                extractComments: false,
-            }),
-            new OptimizeCSSAssetsPlugin(),
-        ],
-    },
+    // optimization: {
+    //     runtimeChunk: 'single',
+    //     splitChunks: {
+    //         chunks: 'all',
+    //     },
+    //     minimize: true,
+    //     minimizer: [
+    //         new TerserPlugin({
+    //             cache: true,
+    //             parallel: true,
+    //             extractComments: false,
+    //         }),
+    //         new OptimizeCSSAssetsPlugin(),
+    //     ],
+    // },
 });
 
 // eslint-disable-next-line import/no-mutable-exports

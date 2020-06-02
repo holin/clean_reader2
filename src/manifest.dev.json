@@ -11,8 +11,6 @@
         "persistent": true
     },
     "permissions": [
-      "background",
-      "notifications",
       "contextMenus",
       "activeTab", "tabs", "http://*/*", "https://*/*", "file://*/*",
       "storage"

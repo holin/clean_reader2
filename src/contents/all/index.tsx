@@ -48,6 +48,14 @@ new function ($) {
   }
 
   function init($) {
+    // detect selction
+    $(document).mouseup(function (e) {
+      mouseup_event = e
+    })
+    $(document).mousedown(function (e) {
+      mouseup_event = e
+    })
+
     if (window.location.pathname === '/kbsweb/') {
       let makeTeamVSFunc = function () {
         let inserted = false
@@ -89,3 +97,28 @@ new function ($) {
   }
   init($)
 }($)
+
+let mouseup_event = null
+function alert_message(message) {
+  $('body').append(`
+    <div class="cr-alert-message">${message}</div>
+  `)
+  if (mouseup_event) {
+    $('.cr-alert-message').css({
+      left: mouseup_event.pageX + 50,
+      top: mouseup_event.pageY + 15
+    })
+  }
+  setTimeout(() => {
+    $('.cr-alert-message').remove()
+  }, 3000)
+}
+
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+    if (request.message) {
+      alert_message( request.message )
+    }
+    // sendResponse({farewell: "goodbye"})
+  }
+);

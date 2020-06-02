@@ -111,3 +111,19 @@ $progress-bg-color: rgb(230, 215, 215);
   }
 
 }
+
+.cr-alert-message {
+  width: 100px;
+  height: 25px;
+  line-height: 24px;
+  border: 1px solid #faa;
+  border-radius: 4px;
+  margin-left: -50px;
+  position: absolute;
+  left: 50%;
+  bottom: 30%;
+  background: #fee;
+  color: #f55;
+  z-index:999;
+  text-align: center;
+}

@@ -1,23 +1,35 @@
 import { hot } from 'react-hot-loader/root';
-import './App.scss';
-
 import React, { Component } from 'react';
 import {
   SegmentedControl, SegmentedControlItem, Text, View, Box,
   TextInput, Button,
   ListView,
-  ListViewHeader,
-  ListViewFooter,
   ListViewSection,
-  ListViewSectionHeader,
-  ListViewRow,
-  ListViewSeparator
+  ListViewRow
 } from 'react-desktop/macOs';
+
+import API from '../libs/api'
+import Db from '../libs/db'
+
+
+import './App.scss';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = { selected: 1, email: 'test@gmail.com', password: 'testpasswd' }
+    this.state = {
+      selected: 1,
+      loading: true,
+      logined: false,
+      email: 'holin.he@gmail.com',
+      password: 'heweilin'
+    }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({logined: !!Db.account, loading: false})
+    }, 100);
   }
 
   render() {
@@ -44,10 +56,47 @@ class App extends Component {
 
   login() {
     console.log(this.state)
+    let {email, password} = this.state
+    API.login(email, password).then( rtn => {
+      console.log('rtn', rtn)
+      if (!!rtn.success) {
+        // TODO show sucess
+        console.log('Db.account', Db.account)
+        this.setState({logined: true})
+      } else {
+        // TODO show fail
+      }
+    })
+    .catch(error => console.log('Error:', error))
   }
 
+  logout() {
+    this.setState({logined: false})
+    Db.remove_account()
+  }
 
   renderLoginForm() {
+    if (this.state.loading) {
+      return (<View>
+        <Text>Loading...</Text>
+      </View>)
+    }
+    if (Db.account) {
+      return (<View>
+        <ListViewSection >
+          <ListViewRow>
+            <Text width="100%">
+              {Db.account.email}
+            </Text>
+          </ListViewRow>
+          <ListViewRow>
+            <Button color="red" onClick={this.logout.bind(this)}>
+              Logout
+            </Button>
+          </ListViewRow>
+        </ListViewSection>
+      </View>)
+    }
     return <ListView width="100%">
       <ListViewSection >
         <ListViewRow>
@@ -76,42 +125,6 @@ class App extends Component {
         </ListViewRow>
       </ListViewSection>
     </ListView>
-  }
-
-  renderLoginForm2() {
-    return <View>
-      <View
-
-        width="500px"
-      >
-        <TextInput
-          label="Email"
-          placeholder="user@example.com"
-          defaultValue=""
-          onChange={this.handleChange}
-        />
-      </View>
-      <View
-
-        width="500px"
-      >
-        <TextInput
-          label="Password"
-          placeholder="******"
-          defaultValue=""
-          password
-          onChange={this.handleChange}
-        />
-      </View>
-      <View
-
-        width="500px"
-      >
-        <Button color="blue" onClick={() => console.log('Clicked!')}>
-          Login
-        </Button>
-      </View>
-    </View>
   }
 
   renderItems() {

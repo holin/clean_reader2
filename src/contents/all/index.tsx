@@ -47,6 +47,33 @@ new function ($) {
     })
   }
 
+  (function ( $ ) {
+    var keycodes = []
+    $.fn.enlarge = function( options ) {
+      // This is the easiest way to have default options.
+    var settings = $.extend({
+      pressed: function () { console.log('triplePress callback') },
+      canceled: function () { console.log('canceled callback') },
+    }, options )
+
+    $(this).on('keyup', (e) => {
+      keycodes.push(e.keyCode)
+      var keycodes_joined = keycodes.join("-")
+      if(keycodes_joined === "91-17" || keycodes_joined === "17-91") {
+        settings.pressed($(this))
+      } else if (e.keyCode === 27) {
+        settings.canceled($(this))
+      }
+      setTimeout( function() {
+        keycodes = []
+      }, 1800)
+    })
+
+    return this
+    };
+  }( $ ));
+
+
   function init($) {
     // detect selction
     $(document).mouseup(function (e) {
@@ -54,6 +81,15 @@ new function ($) {
     })
     $(document).mousedown(function (e) {
       mouseup_event = e
+    })
+
+    $("textarea").enlarge({
+      pressed: function($this) {
+        $this.toggleClass('cr-enlarged-textarea')
+      },
+      canceled: function($this) {
+        $this.removeClass('cr-enlarged-textarea')
+      }
     })
 
     if (window.location.pathname === '/kbsweb/') {

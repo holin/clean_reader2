@@ -127,3 +127,8 @@ $progress-bg-color: rgb(230, 215, 215);
   z-index:999;
   text-align: center;
 }
+
+.cr-enlarged-textarea {
+  width: 1000px !important;
+  min-height: 1000px !important;
+}

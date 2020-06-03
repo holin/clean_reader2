@@ -96,6 +96,7 @@ new function ($) {
   init($)
 }($)
 
+
 let save_word_menu = null
 if(!save_word_menu) {
   save_word_menu = chrome.contextMenus.create({

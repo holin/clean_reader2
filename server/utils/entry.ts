@@ -23,7 +23,7 @@ const prodEntry: Record<string, string[]> = {
     options: [optionsPath],
     popup: [popupPath],
 };
-const entry = __DEV__ ? devEntry : prodEntry;
+const entry = false ? devEntry : prodEntry;
 
 if (ENABLE_DEVTOOLS) {
     entry.options.unshift('react-devtools');
@@ -57,7 +57,7 @@ scriptNames.forEach((name) => {
 
 if (entry.all && __DEV__) {
     entry.all.unshift(resolve(__dirname, './autoRefreshClient.ts'));
-    entry.background.unshift(resolve(__dirname, './autoReloadClient.ts'));
+    // entry.background.unshift(resolve(__dirname, './autoReloadClient.ts'));
 }
 
 export default entry;

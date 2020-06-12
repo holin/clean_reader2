@@ -47,7 +47,7 @@ $progress-bg-color: rgb(230, 215, 215);
       }
     .clean-reader-show-main {
         position: absolute !important;
-        z-index: 2147483645 !important;
+        z-index: 2147483644 !important;
         max-width: 100% !important;
         padding: 15px !important;
         margin: 0 !important;
@@ -115,6 +115,7 @@ $progress-bg-color: rgb(230, 215, 215);
 .cr-alert-message {
   width: 100px;
   height: 25px;
+  padding: 2px 5px;
   line-height: 24px;
   border: 1px solid #faa;
   border-radius: 4px;
@@ -124,8 +125,9 @@ $progress-bg-color: rgb(230, 215, 215);
   bottom: 30%;
   background: #fee;
   color: #f55;
-  z-index:999;
+  z-index: 2147483645 !important;
   text-align: center;
+  font-size: 14px !important;
 }
 
 .cr-enlarged-textarea {

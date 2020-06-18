@@ -83,6 +83,10 @@ new function ($) {
       mouseup_event = e
     })
 
+    $(document).on('click', function (e) {
+      $('.cr-alert-message').remove()
+    })
+
     $("textarea").enlarge({
       pressed: function($this) {
         $this.toggleClass('cr-enlarged-textarea')
@@ -92,28 +96,34 @@ new function ($) {
       }
     })
 
-    if (window.location.pathname === '/kbsweb/') {
-      let makeTeamVSFunc = function () {
-        let inserted = false
-        _.each($('.schedule-item'), function (item) {
-          let $item = $(item)
-          let html = _.map($item.find('.team'), function (team) {
-            return $.trim($(team).text().replace(/\d*\(\d\)/g, ''))
-          }).join('vs')
-          if (!$item.next().is('.vs-c')) {
-            $item.after("<div class='vs-c' style='margin-left:40px;'><input type='text' value='" + html + "' style='border:1px solid #efefef; padding: 3px;text-align:center' onfocus='this.select()'></div>")
-          } else {
-            inserted = true
+
+    function nbaMakeTeamVsFunc() {
+      if (window.location.pathname === '/kbsweb/') {
+        let makeTeamVSFunc = function () {
+          let inserted = false
+          _.each($('.schedule-item'), function (item) {
+            let $item = $(item)
+            let html = _.map($item.find('.team'), function (team) {
+              return $.trim($(team).text().replace(/\d*\(\d\)/g, ''))
+            }).join('vs')
+            if (!$item.next().is('.vs-c')) {
+              $item.after("<div class='vs-c' style='margin-left:40px;'><input type='text' value='" + html + "' style='border:1px solid #efefef; padding: 3px;text-align:center' onfocus='this.select()'></div>")
+            } else {
+              inserted = true
+            }
+          })
+          if (!inserted) {
+            setTimeout(() => {
+              makeTeamVSFunc()
+            }, 1000)
           }
-        })
-        if (!inserted) {
-          setTimeout(() => {
-            makeTeamVSFunc()
-          }, 1000)
         }
+        makeTeamVSFunc()
       }
-      makeTeamVSFunc()
     }
+    // nbaMakeTeamVsFunc()
+
+
 
     // Back to top by press `b` twice in 500 millisecond.
     doublePress('b', () => {

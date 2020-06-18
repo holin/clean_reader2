@@ -113,18 +113,19 @@ $progress-bg-color: rgb(230, 215, 215);
 }
 
 .cr-alert-message {
+  white-space: nowrap;
   width: 100px;
   height: 25px;
   padding: 2px 5px;
   line-height: 24px;
-  border: 1px solid #faa;
+  border: 1px solid #fcc;
   border-radius: 4px;
   margin-left: -50px;
   position: absolute;
   left: 50%;
   bottom: 30%;
   background: #fee;
-  color: #f55;
+  color: #f88;
   z-index: 2147483645 !important;
   text-align: center;
   font-size: 14px !important;

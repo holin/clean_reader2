@@ -22,7 +22,9 @@ class App extends Component {
       loading: true,
       logined: false,
       email: 'holin.he@gmail.com',
-      password: 'heweilin'
+      password: 'heweilin',
+      word: '',
+      word_saved: false
     }
   }
 
@@ -46,12 +48,31 @@ class App extends Component {
     );
   }
 
+  handleWordChange(e) {
+    this.setState({word: e.target.value})
+  }
+
+  handleWordFocus(e) {
+    this.setState({word_saved: false})
+  }
+
   handleEmailChange(e) {
     this.setState({email: e.target.value})
   }
 
-  handlePasswordChange(e) {
-    this.setState({password: e.target.value})
+  createNewWord() {
+    console.log(this.state)
+    let {word} = this.state
+    API.save_word(word).then( rtn => {
+      console.log('rtn', rtn)
+      if (!!rtn.success) {
+        // show sucess
+        this.setState({word_saved: true})
+      } else {
+        // TODO show fail
+      }
+    })
+    .catch(error => console.log('Error:', error))
   }
 
   login() {
@@ -127,10 +148,40 @@ class App extends Component {
     </ListView>
   }
 
+  renderNewWordForm() {
+    if (this.state.loading) {
+      return (<View>
+        <Text>Loading...</Text>
+      </View>)
+    }
+    return <ListView width="100%">
+      <ListViewSection >
+        <ListViewRow>
+        <TextInput
+          width="100%"
+          label="Word"
+          placeholder="new word"
+          defaultValue={this.state.word}
+          onFocus={this.handleWordFocus.bind(this)}
+          onChange={this.handleWordChange.bind(this)}
+        />
+        </ListViewRow>
+
+        {this.state.word_saved && <ListViewRow><Text width="100%">Saved!</Text></ListViewRow>}
+
+        <ListViewRow>
+        <Button color="blue" onClick={this.createNewWord.bind(this)}>
+          Create
+        </Button>
+        </ListViewRow>
+      </ListViewSection>
+    </ListView>
+  }
+
   renderItems() {
     return [
       this.renderItem(1, '账号', this.renderLoginForm()),
-      this.renderItem(2, '其他', <Text>Coming soon...</Text>),
+      this.renderItem(2, '添加生词', this.renderNewWordForm()),
     ];
   }
 

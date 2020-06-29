@@ -7,7 +7,7 @@ class Reader {
     this.$ = $
     this.off = true
     this.reading = false
-    this.target_selector = 'div,section,article,p,td'
+    this.target_selector = 'div,section,article,p,td,main'
     this.current_zoom = 100
     this.origin_width = 0
     this.zoom_step = 10

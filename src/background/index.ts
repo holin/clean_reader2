@@ -97,25 +97,54 @@ new function ($) {
 }($)
 
 
+function create_word(word, callback) {
+  word = word.trim()
+  if (word.length < 1) {
+    return
+  }
+  API.save_word(word).then(response => {
+    let message = 'saved failed'
+    if (!!response.success) {
+      // notify success
+      message = 'saved success'
+    }
+    callback({cmd: 'message', message: message})
+  }).catch(e => {
+    console.log('saved word error', e)
+  })
+}
+
+function generate_port_messager(port) {
+  return function port_messager (msg) {
+    switch (msg.cmd) {
+      case 'create-word':
+        create_word(msg.word, function (message) {
+          port.postMessage(message);
+        })
+        break
+      default:
+    }
+  }
+}
+
+let port = null
+chrome.runtime.onConnect.addListener(function(_port) {
+  if (_port.name != "create-words-port") {
+    return
+  }
+  port = _port
+  port.onMessage.addListener(generate_port_messager(port));
+});
+
+
 let save_word_menu = null
 if(!save_word_menu) {
   save_word_menu = chrome.contextMenus.create({
     title: "Save word \"%s\"",
     contexts: ["selection"],
     onclick: function(info, tab) {
-      console.log('info', info)
-      const word = info.selectionText
-      API.save_word(word).then(response => {
-        let message = 'saved failed'
-        console.log('response', response, !!response.success)
-        if (!!response.success) {
-          // notify success
-          message = 'saved success'
-        }
-        chrome.tabs.sendMessage(tab.id, {message: message}, function(response) {
-          // console.log('response from tab', response);
-        });
-      })
+      const words = info.selectionText
+      port.postMessage({cmd: 'create-words', words: words})
     }
   })
 }

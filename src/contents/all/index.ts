@@ -3,6 +3,8 @@ import './style.scss';
 import $ from 'jquery'
 import _ from 'lodash'
 import Reader from '../../libs/reader'
+import API from '../../libs/api'
+import Words from '../../libs/words'
 import hotkeys from 'hotkeys-js'
 
 const reader = new Reader($)
@@ -83,6 +85,10 @@ new function ($) {
       mouseup_event = e
     })
 
+    $(document).on('click', '.cr-closer', function (e) {
+      $(this).parents('.cr-closable').remove()
+    })
+
     $(document).on('click', function (e) {
       $('.cr-alert-message').remove()
     })
@@ -139,10 +145,16 @@ new function ($) {
     hotkeys('esc', (e) => {
       // escape
       reader.close()
+      global_escape()
     })
   }
   init($)
 }($)
+
+let global_escape = function() {
+  // hide words selection
+  $('.cr-words-to-create-c').remove()
+}
 
 let mouseup_event = null
 function alert_message(message) {
@@ -160,11 +172,37 @@ function alert_message(message) {
   }, 3000)
 }
 
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-    if (request.message) {
-      alert_message( request.message )
+function port_messager (msg) {
+  if (msg.cmd) {
+    switch(msg.cmd) {
+      case 'create-words':
+        // handle multiple words
+        create_words(msg.words)
+        break;
+      case 'message':
+        alert_message(msg.message)
+        break;
+      default:
+        console.log('not implemented yet', msg)
+        // code block
     }
-    sendResponse({farewell: "goodbye"})
   }
-);
+}
+var port = chrome.runtime.connect({name: "create-words-port"})
+port.onMessage.addListener(port_messager)
+
+function send_create_word(word) {
+  port.postMessage({cmd: 'create-word', word: word})
+}
+
+
+function create_words(words) {
+  words = words.split(/\s+/)
+  if (words.length == 1) {
+    send_create_word(words[0])
+  } else if (words.length > 1) {
+    // show words choose
+    (new Words($, send_create_word.bind(this))).render_selects(words)
+  }
+}
+

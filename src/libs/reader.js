@@ -159,6 +159,12 @@ class Reader {
     })
   }
 
+  init_darkmode_toggle () {
+    let $ = this.$
+    //TODO init indicator
+    $('body').append("<div class='darkmode-toggle'>dark</div>")
+  }
+
   removeHoveredElement () {
     let $ = this.$
     console.log('rr', $('.'+this.target_klass), $('.'+this.target_klass).get(0))
@@ -271,6 +277,7 @@ class Reader {
 
       //init indicator
       this.init_indicator()
+      this.init_darkmode_toggle()
 
     }, 1)
   }
@@ -378,6 +385,10 @@ class Reader {
     $('body').on('click', '.clean-reader-zoom-in', e => {
       this.zoomin()
     })
+    $('body').on('click', '.darkmode-toggle', e => {
+      $('#' + this.id).toggleClass('darkmode')
+    })
+
   }
 
   clear_selection () {

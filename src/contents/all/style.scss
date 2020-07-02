@@ -172,6 +172,7 @@ $progress-bg-color: rgb(230, 215, 215);
 }
 
 .cr-words-to-create-c {
+  overflow: auto;
   position: fixed;
   display: block;
   bottom:0;

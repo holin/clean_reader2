@@ -33,16 +33,16 @@ class Words {
   }
 
   clean_words(words) {
-    let kept_words = []
+    let kept_words = new Set()
 
     for (let i = 0; i < words.length; i++) {
-      const word = words[i].replace(/[^\w]+/i, '')
-      if (word.length > 2) {
-        kept_words.push(word.toLowerCase())
+      const word = words[i].replace(/^\d+$/, '')
+      if (word.length > 2 && word.length < 20) {
+        kept_words.add(word.toLowerCase())
       }
     }
 
-    return kept_words
+    return Array.from(kept_words)
   }
 }
 

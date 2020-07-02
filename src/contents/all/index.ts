@@ -197,6 +197,9 @@ function send_create_word(word) {
 
 
 function create_words(words) {
+  console.log('words before', words)
+  words = words.replace(/[^\w]+/gi, ' ')
+  console.log('words ater', words)
   words = words.split(/\s+/)
   if (words.length == 1) {
     send_create_word(words[0])

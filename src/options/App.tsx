@@ -60,6 +60,10 @@ class App extends Component {
     this.setState({email: e.target.value})
   }
 
+  handlePasswordChange(e) {
+    this.setState({password: e.target.value})
+  }
+
   createNewWord() {
     console.log(this.state)
     let {word} = this.state

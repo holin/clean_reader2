@@ -140,7 +140,7 @@ chrome.runtime.onConnect.addListener(function(_port) {
 let save_word_menu = null
 if(!save_word_menu) {
   save_word_menu = chrome.contextMenus.create({
-    title: "Save word \"%s\"",
+    title: "Add word \"%s\"",
     contexts: ["selection"],
     onclick: function(info, tab) {
       const words = info.selectionText

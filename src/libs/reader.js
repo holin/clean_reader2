@@ -139,6 +139,7 @@ class Reader {
 
     this.reading = false
     $('.progress-indicator-c').remove();
+    $('.darkmode-toggle').remove();
     $('.' + this.mask_klass).remove()
     $('.' + this.target_klass).removeClass(this.target_klass)
     $('#' + this.id).attr('id', '')

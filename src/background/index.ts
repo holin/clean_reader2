@@ -127,14 +127,34 @@ function generate_port_messager(port) {
   }
 }
 
-let port = null
-chrome.runtime.onConnect.addListener(function(_port) {
-  if (_port.name != "create-words-port") {
+let ports = {}
+
+function find_port(tab) {
+  return ports[tab.id]
+}
+
+function send_create_word_message(tab, words) {
+  let port = find_port(tab)
+  if (!port) {
+    console.error('no port for tab', tab)
     return
   }
-  port = _port
+  port.postMessage({cmd: 'create-words', words: words})
+}
+
+chrome.runtime.onConnect.addListener(function(port) {
+  if (port.name != "create-words-port") {
+    return
+  }
+
+  // https://developer.chrome.com/extensions/runtime#type-Port
+  // https://developer.chrome.com/extensions/runtime#type-MessageSender
+  if (!port.sender && !port.sender.tab) return
+
+  // https://developer.chrome.com/extensions/tabs#type-Tab
+  ports[port.sender.tab.id] = port
   port.onMessage.addListener(generate_port_messager(port));
-});
+})
 
 
 let save_word_menu = null
@@ -144,7 +164,7 @@ if(!save_word_menu) {
     contexts: ["selection"],
     onclick: function(info, tab) {
       const words = info.selectionText
-      port.postMessage({cmd: 'create-words', words: words})
+      send_create_word_message(tab, words)
     }
   })
 }

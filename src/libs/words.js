@@ -1,5 +1,5 @@
 class Words {
-  constructor ($, create_word_fn) {
+  constructor($, create_word_fn) {
     this.$ = $
     this.create_word_fn = create_word_fn
 
@@ -15,7 +15,16 @@ class Words {
     })
   }
 
+  clear_text_selection() {
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    } else if (document.selection) {
+      document.selection.empty();
+    }
+  }
+
   render_selects(words) {
+    this.clear_text_selection()
     words = this.clean_words(words)
     if (words.length < 1) {
       return

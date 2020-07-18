@@ -177,6 +177,8 @@ $progress-bg-color: rgb(230, 215, 215);
   overflow: auto;
   position: fixed;
   display: block;
+  // https://stackoverflow.com/questions/491052/minimum-and-maximum-value-of-z-index/25461690#25461690
+  z-index: 2147483646;
   bottom:0;
   left:0;
   width: 100%;

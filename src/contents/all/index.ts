@@ -142,6 +142,10 @@ new function ($) {
       reader.toggle()
     })
 
+    triplePress('g', () => {
+      fetch_github_repo_last_commit()
+    })
+
     hotkeys('esc', (e) => {
       // escape
       reader.close()
@@ -195,6 +199,60 @@ function send_create_word(word) {
   port.postMessage({cmd: 'create-word', word: word})
 }
 
+function github_port_messager(msg) {
+  if (msg.cmd) {
+    switch(msg.cmd) {
+      case 'repo-last-commit-fetched':
+        const id = msg.data.id
+        const date = msg.data.commits[0].commit.author.date
+        console.log($("#"+id), id, date)
+        $("#"+id).append('<span style="color: gray; font-size: 0.8em;">(' + date + ')</span>')
+        break;
+      default:
+        console.log('not implemented yet', msg)
+        // code block
+    }
+  }
+}
+function fetch_github_repo_last_commit() {
+  var port = chrome.runtime.connect({name: "github-port"})
+  port.onMessage.addListener(github_port_messager)
+
+  function pull_owner_and_repo(url) {
+    let matches = url.match(/https:\/\/github\.com\/([^\/]+)\/([^\/]+)$/)
+    if (!matches) {
+      return null
+    }
+    const owner = matches[1]
+    const repo = matches[2]
+    if (owner === 'site') {
+      return null
+    }
+
+    if (owner && repo) {
+      return { owner, repo }
+    }
+    return null
+  }
+
+  function rand_id() {
+    return ("id" + Math.random()).replace('0.', '')
+  }
+
+  // fetch all a link
+  let repos = []
+  $('a').each(function(){
+    let rtn = pull_owner_and_repo($(this).attr('href'))
+    if (rtn) {
+      const id = rand_id()
+      $(this).attr('id', id)
+      rtn.id = id
+      repos.push(rtn)
+    }
+  })
+
+  port.postMessage({cmd: 'repo-last-commit', repos: repos})
+}
 
 function create_words(words) {
   console.log('words before', words)

@@ -5,6 +5,7 @@ import _ from 'lodash'
 import Db from '../libs/db'
 import API from '../libs/api'
 import $ from 'jquery'
+import {Octokit} from '@octokit/rest'
 
 new function ($) {
   function init($) {
@@ -142,7 +143,47 @@ function send_create_word_message(tab, words) {
   port.postMessage({cmd: 'create-words', words: words})
 }
 
+function init_github_port(port) {
+  port.onMessage.addListener(function port_messager (msg) {
+    switch (msg.cmd) {
+      case 'repo-last-commit':
+        const octokit = new Octokit()
+
+        for (let i = 0; i < msg.repos.length; i++) {
+          const item = msg.repos[i];
+          let owner = item.owner
+          let repo = item.repo
+          octokit.repos.listCommits({
+            owner: owner,
+            repo: repo,
+            per_page: 1
+          }).then((data) => {
+            port.postMessage({
+              cmd: 'repo-last-commit-fetched',
+              data: {
+                id: item.id,
+                repo,
+                owner,
+                commits: data['data']
+              }
+            })
+          }).catch( e => {
+            console.log('init_github_port exception', e)
+          })
+        }
+
+        break
+      default:
+    }
+  })
+}
+
 chrome.runtime.onConnect.addListener(function(port) {
+  if (port.name == "github-port") {
+    init_github_port(port)
+    return
+  }
+
   if (port.name != "create-words-port") {
     return
   }

@@ -43,6 +43,7 @@
     },
     "dependencies": {
         "@hot-loader/react-dom": "^16.13.0",
+        "@octokit/rest": "^18.0.3",
         "antd": "^4.2.0",
         "hotkeys-js": "^3.7.6",
         "jquery": "^3.5.1",

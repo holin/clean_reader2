@@ -1,6 +1,7 @@
 $reader-width: 900px;
 $progress-done-color: rgb(113, 113, 207);
 $progress-bg-color: rgb(230, 215, 215);
+$global-bg-color: #f8f8f8;
 
 .clean-reader-body-2,
 #clean-reader-body-2 {
@@ -18,7 +19,15 @@ $progress-bg-color: rgb(230, 215, 215);
     }
 
     &.darkmode * {
-      color: #444 !important;
+      color: #333 !important;
+      background: $global-bg-color !important;
+      text-shadow: none !important;
+      pre {
+        background: white !important;
+        * {
+          background: white !important;
+        }
+      }
     }
 
     .clean-reader-clearfix {
@@ -70,7 +79,7 @@ $progress-bg-color: rgb(230, 215, 215);
             border-radius: 5px !important;
             max-width: $reader-width !important;
             box-shadow: 2px;
-            background: #f8f8f8 !important;
+            background: $global-bg-color !important;
             * {
                 line-height: 1.5em;
                 max-width: 100%;
@@ -93,7 +102,7 @@ $progress-bg-color: rgb(230, 215, 215);
 
 .clean-reader-body-prepare-2 {
     .clean-reader-target {
-        background: #f8f8f8 !important;
+        background: $global-bg-color !important;
         border: 1px dotted #eee !important;
         position: relative;
         * {

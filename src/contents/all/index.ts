@@ -103,34 +103,6 @@ new function ($) {
     })
 
 
-    function nbaMakeTeamVsFunc() {
-      if (window.location.pathname === '/kbsweb/') {
-        let makeTeamVSFunc = function () {
-          let inserted = false
-          _.each($('.schedule-item'), function (item) {
-            let $item = $(item)
-            let html = _.map($item.find('.team'), function (team) {
-              return $.trim($(team).text().replace(/\d*\(\d\)/g, ''))
-            }).join('vs')
-            if (!$item.next().is('.vs-c')) {
-              $item.after("<div class='vs-c' style='margin-left:40px;'><input type='text' value='" + html + "' style='border:1px solid #efefef; padding: 3px;text-align:center' onfocus='this.select()'></div>")
-            } else {
-              inserted = true
-            }
-          })
-          if (!inserted) {
-            setTimeout(() => {
-              makeTeamVSFunc()
-            }, 1000)
-          }
-        }
-        makeTeamVSFunc()
-      }
-    }
-    // nbaMakeTeamVsFunc()
-
-
-
     // Back to top by press `b` twice in 500 millisecond.
     doublePress('b', () => {
       $('html,body').animate({
@@ -256,7 +228,7 @@ function fetch_github_repo_last_commit() {
 
 function create_words(words) {
   console.log('words before', words)
-  words = words.replace(/[^\w]+/gi, ' ')
+  words = words.replace(/[^(\w|\-|')]+/gi, ' ')
   console.log('words ater', words)
   words = words.split(/\s+/)
   if (words.length == 1) {

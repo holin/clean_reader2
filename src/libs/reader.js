@@ -127,6 +127,10 @@ class Reader {
     // console.log('reader close');
     let $ = this.$
 
+    if ($(".hide-via-escape").length > 0) {
+      return;
+    }
+
     // close code pre first?
     if ($('body .max-pre').length > 0) {
       $('body .max-pre').remove()
@@ -325,6 +329,7 @@ class Reader {
     })
 
     $(document).keyup(e => {
+      e.preventDefault();
       if (this.off) {
         return
       }

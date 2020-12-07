@@ -53,6 +53,7 @@ $global-bg-color: #f8f8f8;
     .clean-reader-show {
         max-width: none !important;
         min-height: 100%;
+        overflow: auto !important;
         padding: 0 !important;
         margin: 0 auto !important;
         left: auto !important;

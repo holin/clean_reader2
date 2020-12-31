@@ -7,7 +7,7 @@ class Reader {
     this.$ = $
     this.off = true
     this.reading = false
-    this.target_selector = 'div,section,article,p,td,main'
+    this.target_selector = 'div,section,article,p,td,main,aside'
     this.current_zoom = 100
     this.origin_width = 0
     this.zoom_step = 10
@@ -98,7 +98,8 @@ class Reader {
     let $used = $('.' + this.used_target_klass)
     let w = this.max_width / this.current_zoom * 100
 
-    $used.css('width', '' + w + 'px')
+    $used[0].style.removeProperty('max-width');
+    $used[0].style.setProperty('max-width', '' + w + 'px', 'important');
 
     setTimeout(() => {
       this.set_same_height()

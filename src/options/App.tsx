@@ -16,7 +16,7 @@ import './App.scss';
 
 class App extends Component {
   constructor() {
-    super();
+    super({});
     this.state = {
       selected: 1,
       loading: true,

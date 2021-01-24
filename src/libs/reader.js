@@ -217,6 +217,9 @@ class Reader {
 
     // hide all other node
     $('body *').addClass(this.hide_klass)
+    $('#informawise-extension-root').removeClass(this.hide_klass)
+    $('#informawise-extension-root *').removeClass(this.hide_klass)
+
     elem.removeClass(this.used_target_klass)
 
     elem = cloned_elem.find('.' + this.used_target_klass)

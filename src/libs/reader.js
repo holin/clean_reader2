@@ -219,6 +219,8 @@ class Reader {
     $('body *').addClass(this.hide_klass)
     $('#informawise-extension-root').removeClass(this.hide_klass)
     $('#informawise-extension-root *').removeClass(this.hide_klass)
+    $('#wise-adder-container').removeClass(this.hide_klass)
+    $('#wise-adder-container *').removeClass(this.hide_klass)
 
     elem.removeClass(this.used_target_klass)
 

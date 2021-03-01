@@ -67,7 +67,7 @@ class App extends Component {
   createNewWord() {
     console.log(this.state)
     let {word} = this.state
-    API.save_word(word).then( rtn => {
+    API.save_word(word).then( (rtn: any) => {
       console.log('rtn', rtn)
       if (!!rtn.success) {
         // show sucess
@@ -80,9 +80,8 @@ class App extends Component {
   }
 
   login() {
-    console.log(this.state)
     let {email, password} = this.state
-    API.login(email, password).then( rtn => {
+    API.login(email, password).then( (rtn: any) => {
       console.log('rtn', rtn)
       if (!!rtn.success) {
         // TODO show sucess
@@ -189,7 +188,7 @@ class App extends Component {
     ];
   }
 
-  renderItem(key, title, content) {
+  renderItem(key: any, title: string, content: any) {
     return (
       <SegmentedControlItem
         key={key}
